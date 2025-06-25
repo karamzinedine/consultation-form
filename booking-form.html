@@ -46,9 +46,6 @@
       color: #999;
       opacity: 0.7;
     }
-    .host-form .row {
-      display: block;
-    }
     .host-form .row-pair {
       display: flex;
       flex-wrap: wrap;
@@ -78,12 +75,6 @@
     .host-form .other-field.show {
       display: block !important;
     }
-    div.host-form input.other-field {
-      display: none !important;
-    }
-    div.host-form input.other-field.show {
-      display: block !important;
-    }
     @media (max-width: 600px) {
       .host-form .row-pair {
         flex-direction: column;
@@ -93,13 +84,14 @@
 </head>
 <body>
 <div class="host-form">
-  
-    <form action="https://script.google.com/macros/s/AKfycbxTV5XwCzG3LQGo6pUh0rG1FN6nY8kLjrYDu7ib9RhCPTX0KxXiD21CBvHung78D7vA/exec" method="POST">
+  <form id="consultRequestForm">
+    <div id="formStatus" style="color: green; font-weight: bold; margin-bottom: 15px;"></div>
+
     <label class="required">اسم الجهة / الشركة / المنظمة</label>
     <input type="text" name="entityName" required>
 
     <label class="required">القطاع</label>
-    <select name="sector" required onchange="handleOtherField(this, 'sectorOtherField')">
+    <select name="sector" onchange="handleOtherField(this, 'sectorOtherInput', 'sectorFinal')">
       <option value="">اختر القطاع</option>
       <option>حكومي</option>
       <option>خاص تجاري</option>
@@ -108,10 +100,11 @@
       <option>غير ربحي</option>
       <option value="Other">أخرى</option>
     </select>
-    <input type="text" id="sectorOtherField" name="sectorOther" class="other-field" placeholder="يرجى التحديد" disabled>
+    <input type="text" id="sectorOtherInput" class="other-field" placeholder="يرجى التحديد" oninput="updateFinalValue(this, 'sectorFinal')">
+    <input type="hidden" name="sectorFinal" id="sectorFinal">
 
     <label class="required">عدد الموظفين في الشركة</label>
-    <select name="employeeCount" required onchange="handleOtherField(this, 'employeeOtherField')">
+    <select name="employeeCount" onchange="handleOtherField(this, 'employeeOtherInput', 'employeeCountFinal')">
       <option value="">اختر عدد الموظفين</option>
       <option>أقل من 50 موظفًا</option>
       <option>من 50 إلى 200 موظف</option>
@@ -119,10 +112,11 @@
       <option>أكثر من 500 موظف</option>
       <option value="Other">أخرى</option>
     </select>
-    <input type="text" id="employeeOtherField" name="employeeOther" class="other-field" placeholder="يرجى اختيار الفئة التي تناسب الشركة" disabled>
+    <input type="text" id="employeeOtherInput" class="other-field" placeholder="يرجى اختيار الفئة التي تناسب الشركة" oninput="updateFinalValue(this, 'employeeCountFinal')">
+    <input type="hidden" name="employeeCountFinal" id="employeeCountFinal">
 
     <label class="required">الدولة</label>
-    <select name="country" required onchange="handleOtherField(this, 'countryOtherField')">
+    <select name="country" onchange="handleOtherField(this, 'countryOtherInput', 'countryFinal')">
       <option value="">اختر الدولة</option>
       <option>السعودية</option>
       <option>الإمارات</option>
@@ -147,7 +141,8 @@
       <option>الصومال</option>
       <option value="Other">أخرى</option>
     </select>
-    <input type="text" id="countryOtherField" name="countryOther" class="other-field" placeholder="يرجى إدخال الدولة" disabled>
+    <input type="text" id="countryOtherInput" class="other-field" placeholder="يرجى إدخال الدولة" oninput="updateFinalValue(this, 'countryFinal')">
+    <input type="hidden" name="countryFinal" id="countryFinal">
 
     <label class="required">الوظيفة أو المسمى الوظيفي لمقدم الطلب</label>
     <input type="text" name="jobTitle" placeholder="يرجى تحديد طبيعة دور مقدم الطلب" required>
@@ -218,77 +213,52 @@
   </form>
 </div>
 
-<script type="text/javascript">
-  function handleOtherField(select, inputId) {
-    try {
-      var input = document.getElementById(inputId);
-      if (!input) return;
+<script>
+  function handleOtherField(select, inputId, finalFieldId) {
+    const input = document.getElementById(inputId);
+    const final = document.getElementById(finalFieldId);
 
-      if (select.value === "Other" || select.value === "أخرى") {
-        input.style.display = "block";
-        input.style.visibility = "visible";
-        input.classList.add("show");
-        input.removeAttribute("disabled");
-        input.required = true;
-      } else {
-        input.style.display = "none";
-        input.style.visibility = "hidden";
-        input.classList.remove("show");
-        input.setAttribute("disabled", "true");
-        input.required = false;
-        input.value = "";
-      }
-    } catch (e) {
-      console.log("Error in handleOtherField:", e);
+    if (select.value === "Other" || select.value === "أخرى") {
+      input.style.display = "block";
+      input.disabled = false;
+      final.value = "";
+    } else {
+      input.style.display = "none";
+      input.disabled = true;
+      final.value = select.value;
     }
   }
 
+  function updateFinalValue(input, finalFieldId) {
+    const final = document.getElementById(finalFieldId);
+    final.value = input.value;
+  }
+
   document.addEventListener('DOMContentLoaded', function() {
-    try {
-      var selects = document.querySelectorAll('select[onchange*="handleOtherField"]');
-      for (var i = 0; i < selects.length; i++) {
-        selects[i].addEventListener('change', function(e) {
-          var fieldMap = {
-            'sector': 'sectorOtherField',
-            'employeeCount': 'employeeOtherField',
-            'country': 'countryOtherField'
-          };
-          var fieldId = fieldMap[this.name];
-          if (fieldId) {
-            handleOtherField(this, fieldId);
-          }
-        });
-      }
+    const form = document.getElementById('consultRequestForm');
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
 
-      var form = document.getElementById('consultRequestForm');
-      if (form) {
-        form.addEventListener('submit', function(e) {
-          e.preventDefault();
+      const formData = new FormData(form);
+      const data = new URLSearchParams(formData);
 
-          const formData = new FormData(form);
-          const data = new URLSearchParams(formData);
-
-          fetch("https://script.google.com/macros/s/PASTE-YOUR-SCRIPT-ID/exec", {
-            method: "POST",
-            body: data
-          })
-          .then(response => response.text())
-          .then(text => {
-            alert("✅ تم إرسال الطلب بنجاح!");
-            form.reset();
-          })
-          .catch(error => {
-            alert("❌ حدث خطأ أثناء الإرسال. حاول مرة أخرى.");
-            console.error("Submission error:", error);
-          });
-        });
-      }
-    } catch (e) {
-      console.log("Error in event setup:", e);
-    }
+      fetch("https://script.google.com/macros/s/AKfycbxTV5XwCzG3LQGo6pUh0rG1FN6nY8kLjrYDu7ib9RhCPTX0KxXiD21CBvHung78D7vA/exec", {
+        method: "POST",
+        body: data
+      })
+      .then(response => response.text())
+      .then(text => {
+        document.getElementById("formStatus").innerText = "تم إرسال الطلب بنجاح، سنتواصل معك قريبًا";
+        form.reset();
+        setTimeout(() => location.reload(), 3000);
+      })
+      .catch(error => {
+        document.getElementById("formStatus").style.color = "red";
+        document.getElementById("formStatus").innerText = "حدث خطأ أثناء الإرسال. حاول مرة أخرى.";
+        console.error("Submission error:", error);
+      });
+    });
   });
 </script>
-
-
 </body>
 </html>
