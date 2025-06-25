@@ -94,7 +94,7 @@
 <body>
 <div class="host-form">
   
-    <form action="https://script.google.com/macros/s/your-script-id/exec" method="POST" target="_blank">
+    <form id="consultRequestForm">
     <label class="required">اسم الجهة / الشركة / المنظمة</label>
     <input type="text" name="entityName" required>
 
@@ -264,8 +264,23 @@
       if (form) {
         form.addEventListener('submit', function(e) {
           e.preventDefault();
-          alert('تم إرسال الطلب بنجاح! سيتم التواصل معك قريبًا.');
-          return false;
+
+          const formData = new FormData(form);
+          const data = new URLSearchParams(formData);
+
+          fetch("https://script.google.com/macros/s/PASTE-YOUR-SCRIPT-ID/exec", {
+            method: "POST",
+            body: data
+          })
+          .then(response => response.text())
+          .then(text => {
+            alert("✅ تم إرسال الطلب بنجاح!");
+            form.reset();
+          })
+          .catch(error => {
+            alert("❌ حدث خطأ أثناء الإرسال. حاول مرة أخرى.");
+            console.error("Submission error:", error);
+          });
         });
       }
     } catch (e) {
@@ -273,5 +288,6 @@
     }
   });
 </script>
+
 </body>
 </html>
