@@ -46,9 +46,6 @@
       color: #999;
       opacity: 0.7;
     }
-    .host-form .row {
-      display: block;
-    }
     .host-form .row-pair {
       display: flex;
       flex-wrap: wrap;
@@ -72,21 +69,12 @@
       background-color: #93713b !important;
     }
     .host-form .other-field {
-      margin-top: 10px !important;
-      display: none !important;
+      display: none;
+      margin-top: 10px;
     }
     .host-form .other-field.show {
       display: block !important;
     }
-    
-    /* More specific selectors to override platform styles */
-    div.host-form input.other-field {
-      display: none !important;
-    }
-    div.host-form input.other-field.show {
-      display: block !important;
-    }
-    
     @media (max-width: 600px) {
       .host-form .row-pair {
         flex-direction: column;
@@ -97,12 +85,12 @@
 <body>
 <div class="host-form">
   <form id="consultRequestForm">
-
+    <!-- الحقول الأساسية -->
     <label class="required">اسم الجهة / الشركة / المنظمة</label>
     <input type="text" name="entityName" required>
 
     <label class="required">القطاع</label>
-    <select name="sector" required onchange="handleOtherField(this, 'sectorOtherField')">
+    <select name="sector" onchange="handleOtherField(this, 'sectorOtherField')" required>
       <option value="">اختر القطاع</option>
       <option>حكومي</option>
       <option>خاص تجاري</option>
@@ -111,10 +99,10 @@
       <option>غير ربحي</option>
       <option value="Other">أخرى</option>
     </select>
-    <input type="text" id="sectorOtherField" name="sectorOther" class="other-field" placeholder="يرجى التحديد" disabled>
+    <input type="text" name="sectorOther" id="sectorOtherField" class="other-field" placeholder="يرجى التحديد">
 
     <label class="required">عدد الموظفين في الشركة</label>
-    <select name="employeeCount" required onchange="handleOtherField(this, 'employeeOtherField')">
+    <select name="employeeCount" onchange="handleOtherField(this, 'employeeOtherField')" required>
       <option value="">اختر عدد الموظفين</option>
       <option>أقل من 50 موظفًا</option>
       <option>من 50 إلى 200 موظف</option>
@@ -122,53 +110,24 @@
       <option>أكثر من 500 موظف</option>
       <option value="Other">أخرى</option>
     </select>
-    <input type="text" id="employeeOtherField" name="employeeOther" class="other-field" placeholder="يرجى اختيار الفئة التي تناسب الشركة" disabled>
+    <input type="text" name="employeeOther" id="employeeOtherField" class="other-field" placeholder="يرجى التحديد">
 
     <label class="required">الدولة</label>
-    <select name="country" required onchange="handleOtherField(this, 'countryOtherField')">
+    <select name="country" onchange="handleOtherField(this, 'countryOtherField')" required>
       <option value="">اختر الدولة</option>
       <option>السعودية</option>
       <option>الإمارات</option>
       <option>قطر</option>
-      <option>البحرين</option>
-      <option>الكويت</option>
-      <option>عمان</option>
-      <option>مصر</option>
-      <option>الأردن</option>
-      <option>لبنان</option>
-      <option>فلسطين</option>
-      <option>العراق</option>
-      <option>الجزائر</option>
-      <option>المغرب</option>
-      <option>تونس</option>
-      <option>ليبيا</option>
-      <option>السودان</option>
-      <option>اليمن</option>
-      <option>سوريا</option>
-      <option>موريتانيا</option>
-      <option>جيبوتي</option>
-      <option>الصومال</option>
       <option value="Other">أخرى</option>
     </select>
-    <input type="text" id="countryOtherField" name="countryOther" class="other-field" placeholder="يرجى إدخال الدولة" disabled>
+    <input type="text" name="countryOther" id="countryOtherField" class="other-field" placeholder="يرجى التحديد">
 
     <label class="required">الوظيفة أو المسمى الوظيفي لمقدم الطلب</label>
-    <input type="text" name="jobTitle" placeholder="يرجى تحديد طبيعة دور مقدم الطلب" required>
-
-    <label class="required">طبيعة دور مقدم الطلب</label>
-    <select name="role" required>
-      <option value="">اختر طبيعة الدور</option>
-      <option>مالك / رئيس مجلس إدارة</option>
-      <option>عضو مجلس إدارة</option>
-      <option>مدير تنفيذي CEO</option>
-      <option>مدير إدارة / قسم</option>
-      <option>أخصائى</option>
-      <option>موظف</option>
-    </select>
+    <input type="text" name="jobTitle" required>
 
     <label class="required">مجال الاستضافة / المحاضر / التدريب المطلوب</label>
     <select name="trainingField" required>
-      <option value="">اختر مجال الاستضافة</option>
+      <option value="">اختر</option>
       <option>القيادة والإدارة</option>
       <option>التسويق والمبيعات</option>
       <option>التنمية الذاتية وتحسين الأداء</option>
@@ -177,117 +136,75 @@
 
     <label class="required">نوع الاستضافة ومدتها</label>
     <select name="sessionType" required>
-      <option value="">اختر نوع الاستضافة</option>
-      <option>لقاء تحفيزي في مناسبة تخص الشركة (30 - 60 دقيقة)</option>
-      <option>محاضرة قصيرة (ساعتين فأقل)</option>
+      <option value="">اختر</option>
+      <option>لقاء تحفيزي (30 - 60 دقيقة)</option>
+      <option>محاضرة قصيرة</option>
       <option>دورة يوم واحد</option>
-      <option>دورة 2 - 3 أيام</option>
-      <option>دورة 4 - 5 أيام</option>
     </select>
 
-    <label class="required">التاريخ المقترح من طرفكم للاستضافة</label>
+    <label class="required">التاريخ المقترح</label>
     <input type="date" name="proposedDate" required>
 
-    <label class="required">ملاحظات إضافية أو تفاصيل أخرى</label>
+    <label class="required">ملاحظات إضافية</label>
     <textarea name="notes" rows="4" required></textarea>
 
-    <hr>
-    <label class="required">معلومات الاتصال</label>
-    <p style="margin-top: 0; color: #666; font-size: 14px;">يرجى اضافة معلومات الشخص المعني بالتواصل لاتمام الاستضافة</p>
-
-    <div class="row-pair">
-      <div>
-        <label class="required">الاسم الأول</label>
-        <input type="text" name="firstName" required>
-      </div>
-      <div>
-        <label class="required">الاسم الأخير</label>
-        <input type="text" name="lastName" required>
-      </div>
-    </div>
-
-    <div class="row-pair">
-      <div>
-        <label class="required">البريد الإلكتروني الرسمي</label>
-        <input type="email" name="email" required>
-      </div>
-      <div>
-        <label class="required">رقم الجوال/المحمول</label>
-        <input type="tel" name="phone" required>
-      </div>
-    </div>
+    <label class="required">الاسم الأول</label>
+    <input type="text" name="firstName" required>
+    <label class="required">الاسم الأخير</label>
+    <input type="text" name="lastName" required>
+    <label class="required">البريد الإلكتروني الرسمي</label>
+    <input type="email" name="email" required>
+    <label class="required">رقم الجوال/المحمول</label>
+    <input type="tel" name="phone" required>
 
     <button type="submit">إرسال الطلب</button>
   </form>
 </div>
 
-<script type="text/javascript">
-  // Alternative function name to avoid conflicts
+<script>
   function handleOtherField(select, inputId) {
-    try {
-      var input = document.getElementById(inputId);
-      if (!input) return;
-      
-      if (select.value === "Other") {
-        // Multiple approaches to show the field
-        input.style.display = "block";
-        input.style.visibility = "visible";
-        input.classList.add("show");
-        input.removeAttribute("disabled");
-        input.required = true;
-      } else {
-        // Multiple approaches to hide the field
-        input.style.display = "none";
-        input.style.visibility = "hidden";
-        input.classList.remove("show");
-        input.setAttribute("disabled", "true");
-        input.required = false;
-        input.value = "";
-      }
-    } catch (e) {
-      console.log("Error in handleOtherField:", e);
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    if (select.value === "Other" || select.value === "أخرى") {
+      input.style.display = "block";
+      input.required = true;
+    } else {
+      input.style.display = "none";
+      input.required = false;
+      input.value = "";
     }
   }
 
-  // Backup event listeners using different approaches
-  document.addEventListener('DOMContentLoaded', function() {
-    try {
-      // Add event listeners as backup
-      var selects = document.querySelectorAll('select[onchange*="handleOtherField"]');
-      for (var i = 0; i < selects.length; i++) {
-        selects[i].addEventListener('change', function(e) {
-          var fieldMap = {
-            'sector': 'sectorOtherField',
-            'employeeCount': 'employeeOtherField', 
-            'country': 'countryOtherField'
-          };
-          var fieldId = fieldMap[this.name];
-          if (fieldId) {
-            handleOtherField(this, fieldId);
-          }
-        });
-      }
-      
-      // Form submission handler
-      var form = document.getElementById('consultRequestForm');
-      if (form) {
-        form.addEventListener('submit', function(e) {
-          e.preventDefault();
-          alert('تم إرسال الطلب بنجاح! سيتم التواصل معك قريبًا.');
-          return false;
-        });
-      }
-    } catch (e) {
-      console.log("Error in event setup:", e);
-    }
-  });
+  document.getElementById("consultRequestForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
 
-  // Fallback for older browsers
-  if (window.addEventListener) {
-    window.addEventListener('load', function() {
-      // Additional fallback code here if needed
+    ["sector", "employeeCount", "country"].forEach(field => {
+      const select = formData.get(field);
+      const other = formData.get(field + "Other");
+      if (select === "Other" && other) {
+        formData.set(field, other);
+      }
     });
-  }
+
+    fetch("https://script.google.com/macros/s/AKfycbxTV5XwCzG3LQGo6pUh0rG1FN6nY8kLjrYDu7ib9RhCPTX0KxXiD21CBvHung78D7vA/exec", {
+      method: "POST",
+      body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+      document.body.innerHTML = `
+        <div style="text-align:center; margin-top:100px; font-family:'Noto Sans Arabic', sans-serif;">
+          <h2 style="color: green;">✅ تم إرسال الطلب بنجاح</h2>
+          <p style="font-size: 18px;">شكرًا لك! سنقوم بالتواصل معك قريبًا.</p>
+        </div>`;
+    })
+    .catch(error => {
+      alert("حدث خطأ أثناء الإرسال. حاول مرة أخرى.");
+      console.error(error);
+    });
+  });
 </script>
 </body>
 </html>
