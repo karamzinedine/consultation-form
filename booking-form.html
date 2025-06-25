@@ -94,7 +94,7 @@
 <body>
 <div class="host-form">
   
-    <form id="consultRequestForm" action="https://hooks.zapier.com/hooks/catch/3098838/ub4y1rq/" method="POST">
+    <form action="https://script.google.com/macros/s/AKfycbxTV5XwCzG3LQGo6pUh0rG1FN6nY8kLjrYDu7ib9RhCPTX0KxXiD21CBvHung78D7vA/exec" method="POST">
     <label class="required">اسم الجهة / الشركة / المنظمة</label>
     <input type="text" name="entityName" required>
 
@@ -260,7 +260,29 @@
         });
       }
 
-      // لا حاجة لأي اعتراض هنا، الإرسال يتم مباشرة إلى Zapier
+      var form = document.getElementById('consultRequestForm');
+      if (form) {
+        form.addEventListener('submit', function(e) {
+          e.preventDefault();
+
+          const formData = new FormData(form);
+          const data = new URLSearchParams(formData);
+
+          fetch("https://script.google.com/macros/s/PASTE-YOUR-SCRIPT-ID/exec", {
+            method: "POST",
+            body: data
+          })
+          .then(response => response.text())
+          .then(text => {
+            alert("✅ تم إرسال الطلب بنجاح!");
+            form.reset();
+          })
+          .catch(error => {
+            alert("❌ حدث خطأ أثناء الإرسال. حاول مرة أخرى.");
+            console.error("Submission error:", error);
+          });
+        });
+      }
     } catch (e) {
       console.log("Error in event setup:", e);
     }
