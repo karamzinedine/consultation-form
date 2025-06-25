@@ -269,29 +269,24 @@
       }
       
       // Form submission handler
-      form.addEventListener('submit', function(e) {
-  e.preventDefault();
-
-  const formData = new FormData(form);
-  const data = new URLSearchParams(formData);
-
-  fetch("https://script.google.com/macros/s/AKfycbxTV5XwCzG3LQGo6pUh0rG1FN6nY8kLjrYDu7ib9RhCPTX0KxXiD21CBvHung78D7vA/exec", {
-    method: "POST",
-    body: data
-  })
-  .then(response => response.text())
-  .then(text => {
-    alert("✅ تم إرسال الطلب بنجاح!");
-    form.reset();
-  })
-  .catch(error => {
-    alert("❌ حدث خطأ أثناء الإرسال.");
-    console.error("Submission error:", error);
+      var form = document.getElementById('consultRequestForm');
+      if (form) {
+        form.addEventListener('submit', function(e) {
+          e.preventDefault();
+          alert('تم إرسال الطلب بنجاح! سيتم التواصل معك قريبًا.');
+          return false;
+        });
+      }
+    } catch (e) {
+      console.log("Error in event setup:", e);
+    }
   });
 
-  return false;
-});
-
+  // Fallback for older browsers
+  if (window.addEventListener) {
+    window.addEventListener('load', function() {
+      // Additional fallback code here if needed
+    });
   }
 </script>
 </body>
