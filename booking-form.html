@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>نموذج طلب استضافة</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    .host-form * {
+      font-family: "Noto Sans Arabic", sans-serif !important;
+    }
+    .host-form {
+      direction: rtl;
+      padding: 20px;
+      background-color: #fff;
+    }
+    .host-form form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 1000px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .host-form label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 700;
+    }
+    .host-form label.required::after {
+      content: " *";
+      color: red;
+    }
+    .host-form input,
+    .host-form select,
+    .host-form textarea {
+      width: 100% !important;
+      padding: 10px !important;
+      margin-top: 5px;
+      border: 1px solid #ccc !important;
+      border-radius: 5px;
+      font-family: inherit !important;
+      box-sizing: border-box !important;
+    }
+    .host-form input::placeholder,
+    .host-form textarea::placeholder {
+      color: #999;
+      opacity: 0.7;
+    }
+    .host-form .row {
+      display: block;
+    }
+    .host-form .row-pair {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .host-form .row-pair > div {
+      flex: 1;
+      min-width: 45%;
+    }
+    .host-form button {
+      margin-top: 20px;
+      padding: 12px 20px;
+      background-color: #ab8848 !important;
+      color: white !important;
+      border: none !important;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .host-form button:hover {
+      background-color: #93713b !important;
+    }
+    .host-form .other-field {
+      margin-top: 10px !important;
+      display: none !important;
+    }
+    .host-form .other-field.show {
+      display: block !important;
+    }
+    div.host-form input.other-field {
+      display: none !important;
+    }
+    div.host-form input.other-field.show {
+      display: block !important;
+    }
+    @media (max-width: 600px) {
+      .host-form .row-pair {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="host-form">
+  <form id="consultRequestForm">
+    <label class="required">اسم الجهة / الشركة / المنظمة</label>
+    <input type="text" name="entityName" required>
+
+    <label class="required">القطاع</label>
+    <select name="sector" required onchange="handleOtherField(this, 'sectorOtherField')">
+      <option value="">اختر القطاع</option>
+      <option>حكومي</option>
+      <option>خاص تجاري</option>
+      <option>خاص خدمي</option>
+      <option>مركز / معهد تدريب</option>
+      <option>غير ربحي</option>
+      <option value="Other">أخرى</option>
+    </select>
+    <input type="text" id="sectorOtherField" name="sectorOther" class="other-field" placeholder="يرجى التحديد" disabled>
+
+    <label class="required">عدد الموظفين في الشركة</label>
+    <select name="employeeCount" required onchange="handleOtherField(this, 'employeeOtherField')">
+      <option value="">اختر عدد الموظفين</option>
+      <option>أقل من 50 موظفًا</option>
+      <option>من 50 إلى 200 موظف</option>
+      <option>من 200 إلى 500 موظف</option>
+      <option>أكثر من 500 موظف</option>
+      <option value="Other">أخرى</option>
+    </select>
+    <input type="text" id="employeeOtherField" name="employeeOther" class="other-field" placeholder="يرجى اختيار الفئة التي تناسب الشركة" disabled>
+
+    <label class="required">الدولة</label>
+    <select name="country" required onchange="handleOtherField(this, 'countryOtherField')">
+      <option value="">اختر الدولة</option>
+      <option>السعودية</option>
+      <option>الإمارات</option>
+      <option>قطر</option>
+      <option>البحرين</option>
+      <option>الكويت</option>
+      <option>عمان</option>
+      <option>مصر</option>
+      <option>الأردن</option>
+      <option>لبنان</option>
+      <option>فلسطين</option>
+      <option>العراق</option>
+      <option>الجزائر</option>
+      <option>المغرب</option>
+      <option>تونس</option>
+      <option>ليبيا</option>
+      <option>السودان</option>
+      <option>اليمن</option>
+      <option>سوريا</option>
+      <option>موريتانيا</option>
+      <option>جيبوتي</option>
+      <option>الصومال</option>
+      <option value="Other">أخرى</option>
+    </select>
+    <input type="text" id="countryOtherField" name="countryOther" class="other-field" placeholder="يرجى إدخال الدولة" disabled>
+
+    <label class="required">الوظيفة أو المسمى الوظيفي لمقدم الطلب</label>
+    <input type="text" name="jobTitle" placeholder="يرجى تحديد طبيعة دور مقدم الطلب" required>
+
+    <label class="required">طبيعة دور مقدم الطلب</label>
+    <select name="role" required>
+      <option value="">اختر طبيعة الدور</option>
+      <option>مالك / رئيس مجلس إدارة</option>
+      <option>عضو مجلس إدارة</option>
+      <option>مدير تنفيذي CEO</option>
+      <option>مدير إدارة / قسم</option>
+      <option>أخصائى</option>
+      <option>موظف</option>
+    </select>
+
+    <label class="required">مجال الاستضافة / المحاضر / التدريب المطلوب</label>
+    <select name="trainingField" required>
+      <option value="">اختر مجال الاستضافة</option>
+      <option>القيادة والإدارة</option>
+      <option>التسويق والمبيعات</option>
+      <option>التنمية الذاتية وتحسين الأداء</option>
+      <option>التدريب والتعليم</option>
+    </select>
+
+    <label class="required">نوع الاستضافة ومدتها</label>
+    <select name="sessionType" required>
+      <option value="">اختر نوع الاستضافة</option>
+      <option>لقاء تحفيزي في مناسبة تخص الشركة (30 - 60 دقيقة)</option>
+      <option>محاضرة قصيرة (ساعتين فأقل)</option>
+      <option>دورة يوم واحد</option>
+      <option>دورة 2 - 3 أيام</option>
+      <option>دورة 4 - 5 أيام</option>
+    </select>
+
+    <label class="required">التاريخ المقترح من طرفكم للاستضافة</label>
+    <input type="date" name="proposedDate" required>
+
+    <label class="required">ملاحظات إضافية أو تفاصيل أخرى</label>
+    <textarea name="notes" rows="4" required></textarea>
+
+    <hr>
+    <label class="required">معلومات الاتصال</label>
+    <p style="margin-top: 0; color: #666; font-size: 14px;">يرجى اضافة معلومات الشخص المعني بالتواصل لاتمام الاستضافة</p>
+
+    <div class="row-pair">
+      <div>
+        <label class="required">الاسم الأول</label>
+        <input type="text" name="firstName" required>
+      </div>
+      <div>
+        <label class="required">الاسم الأخير</label>
+        <input type="text" name="lastName" required>
+      </div>
+    </div>
+
+    <div class="row-pair">
+      <div>
+        <label class="required">البريد الإلكتروني الرسمي</label>
+        <input type="email" name="email" required>
+      </div>
+      <div>
+        <label class="required">رقم الجوال/المحمول</label>
+        <input type="tel" name="phone" required>
+      </div>
+    </div>
+
+    <button type="submit">إرسال الطلب</button>
+  </form>
+</div>
+
+<script type="text/javascript">
+  function handleOtherField(select, inputId) {
+    try {
+      var input = document.getElementById(inputId);
+      if (!input) return;
+
+      if (select.value === "Other" || select.value === "أخرى") {
+        input.style.display = "block";
+        input.style.visibility = "visible";
+        input.classList.add("show");
+        input.removeAttribute("disabled");
+        input.required = true;
+      } else {
+        input.style.display = "none";
+        input.style.visibility = "hidden";
+        input.classList.remove("show");
+        input.setAttribute("disabled", "true");
+        input.required = false;
+        input.value = "";
+      }
+    } catch (e) {
+      console.log("Error in handleOtherField:", e);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    try {
+      var selects = document.querySelectorAll('select[onchange*="handleOtherField"]');
+      for (var i = 0; i < selects.length; i++) {
+        selects[i].addEventListener('change', function(e) {
+          var fieldMap = {
+            'sector': 'sectorOtherField',
+            'employeeCount': 'employeeOtherField',
+            'country': 'countryOtherField'
+          };
+          var fieldId = fieldMap[this.name];
+          if (fieldId) {
+            handleOtherField(this, fieldId);
+          }
+        });
+      }
+
+      var form = document.getElementById('consultRequestForm');
+      if (form) {
+        form.addEventListener('submit', function(e) {
+          e.preventDefault();
+          alert('تم إرسال الطلب بنجاح! سيتم التواصل معك قريبًا.');
+          return false;
+        });
+      }
+    } catch (e) {
+      console.log("Error in event setup:", e);
+    }
+  });
+</script>
+</body>
+</html>
